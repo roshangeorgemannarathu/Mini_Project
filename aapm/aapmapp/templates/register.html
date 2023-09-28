@@ -1,0 +1,340 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Include your custom CSS for additional styling -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Custom styles for the registration form */
+        body {
+            background-color: #000; /* Set a black background color for the entire page */
+            color: #000; /* Set text color to black */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2; /* Set an off-white background for the form container */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+            background-color: #fff; /* Set a white background for form inputs */
+            color: #000; /* Set text color to black for form inputs */
+        }
+
+        button[type="submit"] {
+            background-color: #FF9900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #FF8000;
+        }
+
+        .login-link {
+            text-align: center;
+        }
+
+        .login-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Account</h2>
+        
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="fullname" placeholder="Full Name" required>
+                <p id="full-name-error" style="color: red;"></p>
+            </div>
+            
+           
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <p id="username-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const usernameInput = document.getElementById("username");
+                // Get the error message element
+                const usernameError = document.getElementById("username-error");
+            
+                // Add an event listener to the input field to validate on input change
+                usernameInput.addEventListener("input", function () {
+                    const usernameValue = usernameInput.value;
+            
+                    if (usernameValue.includes(" ")) {
+                        usernameError.textContent = "Username should not contain spaces.";
+                        usernameInput.setCustomValidity("Username should not contain spaces.");
+                    } else {
+                        usernameError.textContent = "";
+                        usernameInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                <p id="phone-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const phoneInput = document.getElementById("phone");
+                // Get the error message element
+                const phoneError = document.getElementById("phone-error");
+            
+                // Add an event listener to the input field to validate on input change
+                phoneInput.addEventListener("input", function () {
+                    const phoneValue = phoneInput.value;
+                    const pattern = /^[0-9]{10}$/;
+            
+                    if (!pattern.test(phoneValue)) {
+                        phoneError.textContent = "Phone Number must contain 10 numeric digits.";
+                        phoneInput.setCustomValidity("Invalid Phone Number.");
+                    } else {
+                        phoneError.textContent = "";
+                        phoneInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            
+            
+            <div class="form-group">
+                <label for="housename">House Name</label>
+                <input type="text" id="housename" name="housename" placeholder="House Name" required>
+                <p id="housename-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const housenameInput = document.getElementById("housename");
+                // Get the error message element
+                const housenameError = document.getElementById("housename-error");
+            
+                // Add an event listener to the input field to validate on input change
+                housenameInput.addEventListener("input", function () {
+                    const housenameValue = housenameInput.value;
+                    const pattern = /^[A-Za-z]+$/; // Alphabetic characters only
+            
+                    if (!pattern.test(housenameValue)) {
+                        housenameError.textContent = "House Name should contain alphabetic characters only.";
+                        housenameInput.setCustomValidity("Invalid characters in House Name.");
+                    } else {
+                        housenameError.textContent = "";
+                        housenameInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            <div class="form-group">
+                <label for="pincode">PIN Code</label>
+                <input type="text" id="pincode" name="pincode" placeholder="Pin Code" required>
+                <p id="pincode-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const pincodeInput = document.getElementById("pincode");
+                // Get the error message element
+                const pincodeError = document.getElementById("pincode-error");
+            
+                // Add an event listener to the input field to validate on input change
+                pincodeInput.addEventListener("input", function () {
+                    const pincodeValue = pincodeInput.value;
+                    const pattern = /^\d{6}$/; // Should contain exactly 6 digits
+            
+                    if (!pattern.test(pincodeValue)) {
+                        pincodeError.textContent = "PIN Code must be 6 digits and contain only numbers.";
+                        pincodeInput.setCustomValidity("Invalid PIN Code.");
+                    } else {
+                        pincodeError.textContent = "";
+                        pincodeInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            <div class="form-group">
+                <label for="district">District</label>
+                <select id="district" name="district" required>
+                    <option value="" disabled selected>Select District</option>
+                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                    <option value="Kollam">Kollam</option>
+                    <option value="Pathanamthitta">Pathanamthitta</option>
+                    <option value="Alappuzha">Alappuzha</option>
+                    <option value="Kottayam">Kottayam</option>
+                    <option value="Idukki">Idukki</option>
+                    <option value="Ernakulam">Ernakulam</option>
+                    <option value="Thrissur">Thrissur</option>
+                    <option value="Palakkad">Palakkad</option>
+                    <option value="Malappuram">Malappuram</option>
+                    <option value="Kozhikode">Kozhikode</option>
+                    <option value="Wayanad">Wayanad</option>
+                    <option value="Kannur">Kannur</option>
+                    <option value="Kasaragod">Kasaragod</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <p id="email-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input element
+                const emailInput = document.getElementById("email");
+                // Get the error message element
+                const emailError = document.getElementById("email-error");
+            
+                // Add an event listener to the input field to validate on input change
+                emailInput.addEventListener("input", function () {
+                    const emailValue = emailInput.value;
+                    const lowercaseEmail = emailValue.toLowerCase(); // Convert email to lowercase for comparison
+            
+                    if (emailValue !== lowercaseEmail || !emailValue.includes("@")) {
+                        emailError.textContent = "Email should be in lowercase and contain the @ symbol.";
+                        emailInput.setCustomValidity("Invalid email address.");
+                    } else {
+                        emailError.textContent = "";
+                        emailInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a Password" required>
+                <p id="password-error" style="color: red;"></p>
+            </div>
+            <script>
+                // Get the input element
+                const passwordInput = document.getElementById("password");
+                // Get the error message element
+                const passwordError = document.getElementById("password-error");
+            
+                // Add an event listener to the input field to validate on input change
+                passwordInput.addEventListener("input", function () {
+                    const passwordValue = passwordInput.value;
+                    const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&!*_])[A-Za-z\d@#$%^&!*_]{6,}$/;
+            
+                    if (!pattern.test(passwordValue)) {
+                        passwordError.textContent = "Password must meet the criteria: at least 6 characters, one uppercase letter, one lowercase letter, one digit, and one special character.";
+                        passwordInput.setCustomValidity("Invalid password.");
+                    } else {
+                        passwordError.textContent = "";
+                        passwordInput.setCustomValidity("");
+                    }
+                });
+            </script>
+            
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+
+                <p id="password-match-error" style="color: red;"></p>
+            </div>
+            
+            <script>
+                // Get the input elements
+                const passwordInput = document.getElementById("password");
+                const confirmPasswordInput = document.getElementById("confirm-password");
+                // Get the error message elements
+                const passwordError = document.getElementById("password-error");
+                const passwordMatchError = document.getElementById("password-match-error");
+            
+                // Add an event listener to the "Confirm Password" input to validate on input change
+                confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+            
+                function validateConfirmPassword() {
+                    const passwordInput = document.getElementById('password');
+                    const confirmPasswordInput = document.getElementById('confirm_password');
+                    const confirmPasswordError = document.getElementById('confirmPasswordError');
+                    const confirmPasswordValue = confirmPasswordInput.value.trim();
+                    const passwordValue = passwordInput.value.trim();
+                
+                    if (confirmPasswordValue === '') {
+                        confirmPasswordError.textContent = 'Confirm Password cannot be empty.';
+                        confirmPasswordError.style.color = 'red'; // Set error text color to red
+                    } else if (confirmPasswordValue !== passwordValue) {
+                        confirmPasswordError.textContent = 'Passwords do not match.';
+                        confirmPasswordError.style.color = 'red'; // Set error text color to red
+                    } else {
+                        confirmPasswordError.textContent = '';
+                    }
+                }
+            </script>
+            
+            
+            
+            
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </div>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'aapmapp/validation.js' %}"> </script>
+</body>
+</html>

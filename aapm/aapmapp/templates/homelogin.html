@@ -1,0 +1,79 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Include your CSS stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Add custom CSS for the background image -->
+    <style>
+        body {
+            background-image: url('https://wallpapers.com/images/hd/lionhead-goldfish-7f0rda14z8xc3j3m.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        /* Header style */
+        header {
+            background-color: #000000; /* Blue color */
+            color: #fff; /* White text */
+            padding: 15px 0;
+        }
+        
+        /* Footer style */
+        footer {
+            background-color: #FFFFFF; /* Green color */
+            color: #000000; /* White text */
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Pet Paradise Cart</h1>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="container mt-5">
+       <center> <h1>Welcome to the Pet Paradise Cart</h1></center><br>
+        <h3>Please select your role to login:</h3><br>
+        <form>
+            <div class="row">
+                <br><br><div class="col-md-4">
+                    
+                    <a href="{% url 'login' %}" class="btn btn-danger btn-block">Dealer Login</a>
+                </div>
+                <div class="col-md-4">
+                   <a href="" class="btn btn-success btn-block">Customer Login</a>
+                    
+                </div>
+                <div class="col-md-4">
+                    <button id="deliveryman-login" class="btn btn-info btn-block" type="submit">Deliveryman Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Pet Paradise Cart</p>
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap JavaScript (Popper.js and Bootstrap JS) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Include your JavaScript script -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

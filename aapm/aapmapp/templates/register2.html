@@ -86,7 +86,7 @@
 <body>
     <div class="container">
         <h2>Create a New Account</h2>
-        <form action="registration_process.php" method="post">
+        <form action="" method="post">
             <div class="form-group">
                 <label for="full-name">Full Name</label>
                 <input type="text" id="full-name" name="fullname" placeholder="Full Name" required>
@@ -166,7 +166,31 @@
                     }
                 });
             </script>
-            
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Email Address" required>
+            <p id="email-error" style="color: red;"></p>
+        
+        
+        <script>
+            // Get the input element
+            const emailInput = document.getElementById("email");
+            // Get the error message element
+            const emailError = document.getElementById("email-error");
+        
+            // Add an event listener to the input field to validate on input change
+            emailInput.addEventListener("input", function () {
+                const emailValue = emailInput.value;
+                const lowercaseEmail = emailValue.toLowerCase(); // Convert email to lowercase for comparison
+        
+                if (emailValue !== lowercaseEmail || !emailValue.includes("@")) {
+                    emailError.textContent = "Email should be in lowercase and contain the @ symbol.";
+                    emailInput.setCustomValidity("Invalid email address.");
+                } else {
+                    emailError.textContent = "";
+                    emailInput.setCustomValidity("");
+                }
+            });
+        </script>
             
             
             <div class="form-group">

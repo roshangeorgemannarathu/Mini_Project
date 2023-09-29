@@ -15,10 +15,7 @@ def register(request):
     if request.method == 'POST': 
         fullname = request.POST['fullname']
         username = request.POST['username']
-        phoneno  = request.POST['phone']
-        housename = request.POST['housename']
-        pincode = request.POST['pincode']
-        district = request.POST['district']
+        role = request.POST['role']
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
@@ -27,7 +24,7 @@ def register(request):
             return render(request, 'register.html', {'error_message': 'Passwords do not match'})
 
         # Create a user instance but do not save it yet
-        user = dealer(username=username, email=email)
+        user = dealer(username=username, email=email,role=role ,fullname=fullname,)
 
         # Set the password for the user
         user.set_password(password)
@@ -50,7 +47,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             request.session['username'] = user.username
-            return redirect('home')
+            return redirect('userloginhome')
         else:
             messages.error(request, 'Invalid credentials!!')
 
@@ -97,7 +94,10 @@ def user_login2(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('userloginhome')
+
+def userloginhome(request):
+    return render(request,'userloginhome.html')
 
 '''def user_logout2(request):
     logout(request)

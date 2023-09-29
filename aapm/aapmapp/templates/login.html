@@ -64,7 +64,7 @@ https://templatemo.com/tm-571-hexashop
             background-color: #000; /* Set a black background color for the entire page */
             color: #fff; /* Set text color to white for better visibility */
         }
-
+        
         .container {
             max-width: 400px;
             margin: 0 auto;
@@ -114,7 +114,8 @@ https://templatemo.com/tm-571-hexashop
 </head>
 <body><br><br><br>
     <div class="container">
-        <form class="login-form" action="login_process.php" method="post">
+        <form class="login-form" action=" " method="post">
+            {% csrf_token %}
             <h2>Dealer Login</h2>
             <div class="form-group">
                 <label for="username">Username</label>

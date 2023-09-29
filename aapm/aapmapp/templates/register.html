@@ -123,107 +123,18 @@
                 });
             </script>
             
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
-                <p id="phone-error" style="color: red;"></p>
-            </div>
+           
             
-            <script>
-                // Get the input element
-                const phoneInput = document.getElementById("phone");
-                // Get the error message element
-                const phoneError = document.getElementById("phone-error");
-            
-                // Add an event listener to the input field to validate on input change
-                phoneInput.addEventListener("input", function () {
-                    const phoneValue = phoneInput.value;
-                    const pattern = /^[0-9]{10}$/;
-            
-                    if (!pattern.test(phoneValue)) {
-                        phoneError.textContent = "Phone Number must contain 10 numeric digits.";
-                        phoneInput.setCustomValidity("Invalid Phone Number.");
-                    } else {
-                        phoneError.textContent = "";
-                        phoneInput.setCustomValidity("");
-                    }
-                });
-            </script>
             
             
             
             <div class="form-group">
-                <label for="housename">House Name</label>
-                <input type="text" id="housename" name="housename" placeholder="House Name" required>
-                <p id="housename-error" style="color: red;"></p>
-            </div>
-            
-            <script>
-                // Get the input element
-                const housenameInput = document.getElementById("housename");
-                // Get the error message element
-                const housenameError = document.getElementById("housename-error");
-            
-                // Add an event listener to the input field to validate on input change
-                housenameInput.addEventListener("input", function () {
-                    const housenameValue = housenameInput.value;
-                    const pattern = /^[A-Za-z]+$/; // Alphabetic characters only
-            
-                    if (!pattern.test(housenameValue)) {
-                        housenameError.textContent = "House Name should contain alphabetic characters only.";
-                        housenameInput.setCustomValidity("Invalid characters in House Name.");
-                    } else {
-                        housenameError.textContent = "";
-                        housenameInput.setCustomValidity("");
-                    }
-                });
-            </script>
-            
-            <div class="form-group">
-                <label for="pincode">PIN Code</label>
-                <input type="text" id="pincode" name="pincode" placeholder="Pin Code" required>
-                <p id="pincode-error" style="color: red;"></p>
-            </div>
-            
-            <script>
-                // Get the input element
-                const pincodeInput = document.getElementById("pincode");
-                // Get the error message element
-                const pincodeError = document.getElementById("pincode-error");
-            
-                // Add an event listener to the input field to validate on input change
-                pincodeInput.addEventListener("input", function () {
-                    const pincodeValue = pincodeInput.value;
-                    const pattern = /^\d{6}$/; // Should contain exactly 6 digits
-            
-                    if (!pattern.test(pincodeValue)) {
-                        pincodeError.textContent = "PIN Code must be 6 digits and contain only numbers.";
-                        pincodeInput.setCustomValidity("Invalid PIN Code.");
-                    } else {
-                        pincodeError.textContent = "";
-                        pincodeInput.setCustomValidity("");
-                    }
-                });
-            </script>
-            
-            <div class="form-group">
-                <label for="district">District</label>
-                <select id="district" name="district" required>
-                    <option value="" disabled selected>Select District</option>
-                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-                    <option value="Kollam">Kollam</option>
-                    <option value="Pathanamthitta">Pathanamthitta</option>
-                    <option value="Alappuzha">Alappuzha</option>
-                    <option value="Kottayam">Kottayam</option>
-                    <option value="Idukki">Idukki</option>
-                    <option value="Ernakulam">Ernakulam</option>
-                    <option value="Thrissur">Thrissur</option>
-                    <option value="Palakkad">Palakkad</option>
-                    <option value="Malappuram">Malappuram</option>
-                    <option value="Kozhikode">Kozhikode</option>
-                    <option value="Wayanad">Wayanad</option>
-                    <option value="Kannur">Kannur</option>
-                    <option value="Kasaragod">Kasaragod</option>
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="customer">Customer</option>
+                    <option value="dealer">Dealer</option>
+                    <option value="delivery Man">Delivery Man</option>
                 </select>
             </div>
             

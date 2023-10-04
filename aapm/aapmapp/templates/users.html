@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Accounts</title>
+    <style>
+        /* Top-level CSS for table formatting */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+                /* CSS for Sidebar */
+                .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        /* CSS for Content Area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* CSS for Header */
+        .header {
+            background-color: #555;
+            color: #fff;
+            padding: 20px;
+        }
+
+        /* CSS for Cards (Sample Content) */
+        
+
+        /* CSS for Footer */
+        .footer {
+            background-color: #555;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        form input[type="text"], form select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            width: 200px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="users.html">User Accounts</a>
+        <a href="#">Customers</a>
+        <a href="#">Dealers</a>
+        <a href="#">Delivery Man</a>
+    </div>
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Welcome to the Admin Dashboard</h1>
+        </div>
+    <h1>User Accounts</h1>
+    <form method="GET">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.role.label_tag }}
+        {{ form.role }}
+       
+    </form>
+    <table>
+        <thead>
+            <tr>
+            <th>Username</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dealer in dealers %}
+            <tr>
+                <td>{{ dealer.username }}</td>
+                <td>{{ dealer.fullname }}</td>
+                <td>{{ dealer.email }}</td>
+                <td>{{ dealer.role }}</td>
+                <td>
+                    <!-- Add Delete button with a form -->
+                    <form method="POST" action="/delete/{{ dealer.id }}">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No dealers available.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+</body>
+</html>

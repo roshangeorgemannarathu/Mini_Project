@@ -15,8 +15,13 @@
     <style>
         /* Custom styles for the registration form */
         body {
-            background-color: #000; /* Set a black background color for the entire page */
-            color: #000; /* Set text color to black */
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "/aapmapp/images/cus.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f0f0f0;
+            color: #333;
         }
 
         .container {
@@ -94,6 +99,21 @@
                 <input type="text" id="full-name" name="fullname" placeholder="Full Name" required>
                 <p id="full-name-error" style="color: red;"></p>
             </div>
+            <script>
+                document.getElementById('full-name').addEventListener('input', function () {
+                    var fullNameInput = this.value;
+                    var fullNameError = document.getElementById('full-name-error');
+                    var namePattern = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
+                
+                    if (!namePattern.test(fullNameInput)) {
+                        fullNameError.textContent = 'Full Name can only contain alphabetic characters and spaces.';
+                        this.setCustomValidity('Full Name can only contain alphabetic characters and spaces.');
+                    } else {
+                        fullNameError.textContent = '';
+                        this.setCustomValidity('');
+                    }
+                });
+                </script>
             
            
             

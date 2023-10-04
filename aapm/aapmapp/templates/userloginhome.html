@@ -185,17 +185,10 @@
         <h1><a href="#">Pet Paradise Cart</a></h1>
         
         <nav>
-            {% if user.is_authenticated %}
             <ul>
                 <!-- Add the logout button here -->
-                <li style="float: right;"><a href="{% url 'logout' %}" style="color: blue;">Logout</a></li>
+                <li style="float: right;"><a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a></li>
             </ul>
-            {% else %}
-            <ul>
-                <!-- Add the logout button here -->
-                <li style="float: right;"><a href="{% url 'login' %}" style="color: blue;">Login</a></li>
-            </ul>
-            {% endif %}
         </nav><br>
     </header>
     
@@ -227,19 +220,27 @@
                 <p id="full-name-error" style="color: red;"></p>
                 
                 <script>
-                document.getElementById('full-name').addEventListener('input', function () {
-                    var fullNameInput = this.value;
-                    var fullNameError = document.getElementById('full-name-error');
-                    var namePattern = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
-                
-                    if (!namePattern.test(fullNameInput)) {
-                        fullNameError.textContent = 'Full Name can only contain alphabetic characters and spaces.';
-                        this.setCustomValidity('Full Name can only contain alphabetic characters and spaces.');
-                    } else {
-                        fullNameError.textContent = '';
-                        this.setCustomValidity('');
-                    }
-                });
+                    document.getElementById('full-name').addEventListener('input', function () {
+                        var fullNameInput = this.value;
+                        var fullNameError = document.getElementById('full-name-error');
+                        var namePattern = /^[A-Za-z\s]+$/; // Regular expression for alphabetic characters and spaces
+                    
+                        if (!namePattern.test(fullNameInput)) {
+                            fullNameError.textContent = 'Full Name can only contain alphabetic characters and spaces.';
+                            this.setCustomValidity('Full Name can only contain alphabetic characters and spaces.');
+                        } else {
+                            fullNameError.textContent = '';
+                            this.setCustomValidity('');
+                        }
+                    });
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var logoutButton = document.getElementById("logout-link");
+                        logoutButton.addEventListener("click", function () {
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        });
+                    });
                 </script>
                 
                 

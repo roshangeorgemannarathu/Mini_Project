@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Pet and Aquarium Data</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #000;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            max-width: 100px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>View Your Pet and Aquarium Data</h1>
+
+    <h2>Aquariums</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aquarium in user_aquariums %} {# Use user_aquariums instead of aquariums #}
+                <tr>
+                    <td>{{ aquarium.name }}</td>
+                    <td>${{ aquarium.price }}</td>
+                    <td>{{ aquarium.location }}</td>
+                    <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}" style="width: 100px; height: 100px;"></td>
+                    <td>
+                        <a href="{% url 'edit_viewdatabase' aquarium.id %}">Edit</a>
+                        <a href="{% url 'delete_aquarium' aquarium.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Pets</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Pet Id</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pet in user_pets %} {# Use user_pets instead of pets #}
+                <tr>
+                    <td>{{ pet.id }}</td>
+                    <td>{{ pet.category }}</td>
+                    <td>${{ pet.price }}</td>
+                    <td>{{ pet.location }}</td>
+                    <td><img src="{{ pet.image.url }}" alt="{{ pet.category }} - {{ pet.id }}" width="100"></td>
+                    <td>
+                        <a href="{% url 'edit_viewdatabase' pet.id %}">Edit</a>
+                        <a href="{% url 'delete_aquarium' pet.id %}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Include Bootstrap JS scripts if needed -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

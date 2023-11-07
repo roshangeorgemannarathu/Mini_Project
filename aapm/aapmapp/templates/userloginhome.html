@@ -200,13 +200,16 @@
 
             <div class="user-name">Welcome, {{ request.session.username }}</div>
             <div class="user-description">Role {{ request.session.role }}</div>
+    
             <a href="#" class="get-started-button" id="show-form-button">Edit Profile</a>
-            <a href="#" class="get-started-button" id="show-form-button">Get Started</a>
+        
+            <a href="{% url 'userdealer' %}" class="get-started-button" id="show-form-button">Get Started</a>
         </div>
         
         <!-- End of User Info Section -->
         <div class="form-container" id="registration-form">
-            <form>
+            <form action="#" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
                 <div id="validation-messages"></div>
 
                 <!-- ID Field -->
@@ -364,9 +367,41 @@
                 <!-- Photo ID Field (PDF only) -->
                 <label for="photoid">Photo ID (PDF only):</label>
                 <input type="file" id="photoid" name="photoid" accept=".pdf" required>
-                
+                <!-- Photo Field -->
+                     <label for="photo">Upload Photo:</label>
+                    <input type="file" id="photo" name="photo" accept="image/*" required>
+                    <p id="photo-error" style="color: red;"></p>
 
-
+                    <script>
+                        // Get the input element for the photo
+                        const photoInput = document.getElementById("photo");
+                        // Get the error message element for the photo
+                        const photoError = document.getElementById("photo-error");
+                    
+                        // Add an event listener to the photo input field to validate on file selection
+                        photoInput.addEventListener("change", validatePhoto);
+                    
+                        function validatePhoto() {
+                            const photoFile = photoInput.files[0];
+                    
+                            if (!photoFile) {
+                                photoError.textContent = "Please select a photo.";
+                                photoInput.setCustomValidity("No photo selected.");
+                            } else {
+                                const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+                                const fileExtension = photoFile.name.split(".").pop().toLowerCase();
+                    
+                                if (!allowedExtensions.includes(fileExtension)) {
+                                    photoError.textContent = "Invalid file format. Allowed formats: JPG, JPEG, PNG, GIF.";
+                                    photoInput.setCustomValidity("Invalid file format.");
+                                } else {
+                                    photoError.textContent = "";
+                                    photoInput.setCustomValidity("");
+                                }
+                            }
+                        }
+                    </script>
+                    
 
                 <button type="submit">Submit</button>
             </form>        </div>

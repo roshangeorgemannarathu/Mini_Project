@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pet</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Include your custom CSS file -->
+    <link rel="stylesheet" href="{% static 'your_custom.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <style>
+        /* CSS for Header */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "/aapmapp/images/dog1.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        header {
+            background-color: #009688; /* Header background color */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+    <header>
+        <nav>
+            <div class="container">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Add navigation links here if needed -->
+                </div>
+            </div>
+            <ul>
+                <!-- Add the logout button here -->
+                <li style="float: right;"><a href="{% url 'logout' %}" style="color: white;" id="logout-link">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Content Section -->
+    <div class="container mt-5">
+        <h2>Add a Pet</h2>
+        <form method="post" enctype="multipart/form-data" id="petForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="petName">Pet Name</label>
+                <input type="text" class="form-control" id="petName" name="petname" required>
+            </div>
+            <div class="form-group">
+                <label for="petBreed">Breed</label>
+                <input type="text" class="form-control" id="petBreed" name="breed" required>
+            </div>
+            <div class="form-group">
+                <label for="petPrice">Price</label>
+                <input type="number" class="form-control" id="petPrice" name="price" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="petQuantity">Quantity</label>
+                <input type="text" class="form-control" id="petQuantity" name="Quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="petAge">Age</label>
+                <input type="text" class="form-control" id="petAge" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div><br>
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" class="form-control-file" id="image" name="image" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addPet()">Submit</button>
+        </form>
+    </div>
+    <center><h2>Pet List</h2></center>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pet Name</th>
+                <th>Pet Breed</th>
+                <th>Pet Price</th>
+                <th>Pet Quantity</th>
+                <th>Pet Age</th>
+                <th>Location</th>
+                <th>Image</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        <tbody id="petList">
+            <!-- Rows for pet data will be added here dynamically with JavaScript -->
+        </tbody>
+    </table>
+</body>
+</html>
+<script>
+    function addPet() {
+        const petName = document.getElementById("petName").value;
+        const petBreed = document.getElementById("petBreed").value;
+        const petPrice = document.getElementById("petPrice").value;
+        const petQuantity = document.getElementById("petQuantity").value;
+        const petAge = document.getElementById("petAge").value;
+        const location = document.getElementById("location").value;
+
+        // Handle the image file upload
+        const imageInput = document.getElementById("image");
+        const imageFile = imageInput.files[0];
+
+        // Create a new row in the table
+        const newRow = document.getElementById("petList").insertRow();
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2);
+        const cell4 = newRow.insertCell(3);
+        const cell5 = newRow.insertCell(4);
+        const cell6 = newRow.insertCell(5);
+        const cell7 = newRow.insertCell(6);
+        const cell8 = newRow.insertCell(7);
+
+        cell1.innerHTML = petName;
+        cell2.innerHTML = petBreed;
+        cell3.innerHTML = petPrice;
+        cell4.innerHTML = petQuantity;
+        cell5.innerHTML = petAge;
+        cell6.innerHTML = location;
+
+        // Display the image in the table
+        if (imageFile) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(imageFile); // Set the image source from the file
+            img.style.maxWidth = "100px"; // Set a maximum width for the displayed image
+            cell7.appendChild(img);
+        }
+
+        // Create "Edit" and "Delete" buttons
+        const editButton = document.createElement("button");
+        editButton.innerHTML = "Edit";
+        editButton.className = "btn btn-primary";
+        editButton.onclick = function () {
+            // Implement edit functionality here
+            // You can access the pet's data in this row and open an edit form
+        };
+        cell8.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Delete";
+        deleteButton.className = "btn btn-danger";
+        deleteButton.onclick = function () {
+            // Implement delete functionality here
+            // You can remove the row from the table
+            newRow.remove();
+        };
+        cell8.appendChild(deleteButton);
+
+        // Reset the form
+        document.getElementById("petForm").reset();
+    }
+</script>
+<!-- ... Rest of the HTML code ... -->
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</html>

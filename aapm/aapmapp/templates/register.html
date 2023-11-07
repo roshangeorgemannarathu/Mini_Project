@@ -154,7 +154,7 @@
                     <option value="" disabled selected>Select Role</option>
                     <option value="customer">Customer</option>
                     <option value="dealer">Dealer</option>
-                    <option value="delivery Man">Delivery Man</option>
+                    <option value="deliveryman">Delivery Man</option>
                 </select>
             </div>
             
@@ -214,45 +214,34 @@
             
             <div class="form-group">
                 <label for="confirm-password">Confirm Password</label>
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-
-                <p id="password-match-error" style="color: red;"></p>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+                <p id="confirm-password-error" style="color: red;"></p>
             </div>
             
             <script>
                 // Get the input elements
                 const passwordInput = document.getElementById("password");
                 const confirmPasswordInput = document.getElementById("confirm-password");
+            
                 // Get the error message elements
                 const passwordError = document.getElementById("password-error");
-                const passwordMatchError = document.getElementById("password-match-error");
+                const confirmPasswordError = document.getElementById("confirm-password-error");
             
-                // Add an event listener to the "Confirm Password" input to validate on input change
-                confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+                // Add an event listener to the confirm password input field to validate in real-time
+                confirmPasswordInput.addEventListener("input", function () {
+                    const confirmPasswordValue = confirmPasswordInput.value;
+                    const passwordValue = passwordInput.value;
             
-                function validateConfirmPassword() {
-                    const passwordInput = document.getElementById('password');
-                    const confirmPasswordInput = document.getElementById('confirm_password');
-                    const confirmPasswordError = document.getElementById('confirmPasswordError');
-                    const confirmPasswordValue = confirmPasswordInput.value.trim();
-                    const passwordValue = passwordInput.value.trim();
-                
-                    if (confirmPasswordValue === '') {
-                        confirmPasswordError.textContent = 'Confirm Password cannot be empty.';
-                        confirmPasswordError.style.color = 'red'; // Set error text color to red
-                    } else if (confirmPasswordValue !== passwordValue) {
-                        confirmPasswordError.textContent = 'Passwords do not match.';
-                        confirmPasswordError.style.color = 'red'; // Set error text color to red
+                    if (confirmPasswordValue !== passwordValue) {
+                        confirmPasswordError.textContent = "Passwords do not match.";
+                        confirmPasswordInput.setCustomValidity("Passwords do not match.");
                     } else {
-                        confirmPasswordError.textContent = '';
-                    }
-                }
+                        confirmPasswordError.textContent = "";
+                        confirmPasswordInput.setCustomValidity("");
+                    }
+                });
             </script>
-            
-            
-            
-            
-            
+
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">Create Account</button>
             </div>

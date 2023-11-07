@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    
+    <nav>
+        <ul>
+            <!-- Add the logout button here -->
+            <li style="float: right;"><a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a></li>
+        </ul>
+    </nav>
     <style>
         /* Reset some default styles */
         body, h1, h2, p, ul, li {
@@ -66,15 +73,18 @@
             width: 100%;
         }
     </style>
+    <nav>
+       
+    </nav>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="#">Dashboard</a>
+        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
         <a href="users.html">User Accounts</a>
-        <a href="#">Customers</a>
-        <a href="#">Dealers</a>
-        <a href="#">Delivery Man</a>
+        <a href="customers.html">Customers</a>
+        <a href="dealers.html">Dealers</a>
+        <a href="deliveryman.html">Delivery Man</a>
     </div>
 
     <!-- Content Area -->
@@ -82,7 +92,9 @@
         <!-- Header -->
         <div class="header">
             <h1>Welcome to the Admin Dashboard</h1>
+            
         </div>
+        
 
         <!-- Sample Content -->
         <div class="card">

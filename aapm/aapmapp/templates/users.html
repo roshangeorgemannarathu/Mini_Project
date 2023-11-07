@@ -6,7 +6,7 @@
         /* Top-level CSS for table formatting */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #ADD8E6;
             margin: 0;
             padding: 0;
         }
@@ -122,18 +122,27 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="#">Dashboard</a>
+        <li style=""><a href="#" style="color: red;">Dashboard</a></li>
         <a href="users.html">User Accounts</a>
-        <a href="#">Customers</a>
-        <a href="#">Dealers</a>
+        <a href="customers.html">Customers</a>
+        <a href="dealers.html">Dealers</a>
         <a href="#">Delivery Man</a>
     </div>
     <div class="content">
         <!-- Header -->
         <div class="header">
             <h1>Welcome to the Admin Dashboard</h1>
+            
         </div>
     <h1>User Accounts</h1>
+    <form method="GET" id="filterForm">
+        <!-- Add your filter fields here -->
+        <input type="text" name="username_filter" id="username_filter" placeholder="Filter by Username">
+
+        <button type="button" id="filterButton">Filter</button>
+        </form>
+
+   
     <form method="GET">
         {{ form.username.label_tag }}
         {{ form.username }}
@@ -141,14 +150,14 @@
         {{ form.role }}
        
     </form>
-    <table>
+    <table id="userTable">
         <thead>
             <tr>
             <th>Username</th>
             <th>Fullname</th>
             <th>Email</th>
             <th>Role</th>
-            <th>Delete</th>
+          
             </tr>
         </thead>
         <tbody>
@@ -158,13 +167,7 @@
                 <td>{{ dealer.fullname }}</td>
                 <td>{{ dealer.email }}</td>
                 <td>{{ dealer.role }}</td>
-                <td>
-                    <!-- Add Delete button with a form -->
-                    <form method="POST" action="/delete/{{ dealer.id }}">
-                        {% csrf_token %}
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+                
             </tr>
             {% empty %}
             <tr>
@@ -173,5 +176,21 @@
             {% endfor %}
             </tbody>
     </table>
+    <script>
+        // JavaScript code for handling the filter
+        document.getElementById("filterButton").addEventListener("click", function() {
+            var filterValue = document.getElementById("username_filter").value.toLowerCase();
+            var tableRows = document.querySelectorAll("#userTable tbody tr");
+    
+            tableRows.forEach(function(row) {
+                var username = row.querySelector("td:first-child").textContent.toLowerCase();
+                if (username.includes(filterValue)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 </html>

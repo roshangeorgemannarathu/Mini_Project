@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View User Data</title>
+    <style>
+        /* Add your CSS styles for viewing data here */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Profile</h1></center>
+    <table>
+        <tr>
+            <td>Full Name</td>
+            <td>{{ fullname }}</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>{{ dateofbirth }}</td>
+        </tr>
+        {% comment %} <tr>
+            <td>Gender</td>
+            <td>{{ gender }}</td>
+        </tr> {% endcomment %}
+        <tr>
+            <td>Phone Number</td>
+            <td>{{ phone }}</td>
+        </tr>
+        <tr>
+            <td>House Name</td>
+            <td>{{ housename }}</td>
+        </tr>
+        <tr>
+            <td>PIN Code</td>
+            <td>{{ pincode }}</td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>{{ district }}</td>
+        </tr>
+        <tr>
+            <td>Photo ID</td>
+            <td><a href="{{ photoid }}" target="_blank">View Photo ID</a></td>
+        </tr>
+
+        <tr>
+            <td>Photo</td>
+            <td style=""><img src="{{ photo }}" alt="User Photo" width="200"></td>
+        </tr>
+        
+        
+        
+    </table>
+</body>
+</html>

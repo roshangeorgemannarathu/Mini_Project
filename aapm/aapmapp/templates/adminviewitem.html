@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin View Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+        }
+        a {
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        .approve-btn {
+            background-color: #28a745; /* Green for Approve */
+        }
+        .reject-btn {
+            background-color: #dc3545; /* Red for Reject */
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin View Item</h1>
+
+    <h2>Pet Data</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Location</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        {% for pet in pets %}
+            <tr>
+                <td>{{ pet.id }}</td>
+                <td>{{ pet.category }}</td>
+                <td>${{ pet.price }}</td>
+                <td>{{ pet.location }}</td>
+                <td><img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}"></td>
+                <td>
+                    <a href="{% url 'admin_approve_pet' pet.id %}" class="approve-btn">Approve</a>
+                    <a href="{% url 'admin_reject_pet' pet.id %}" class="reject-btn">Reject</a>
+                   
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Aquarium Data</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Location</th>
+        <th>Image</th>
+        <th>Actions</th>
+    </tr>
+    {% for aquarium in aquariums %}
+        <tr>
+            <td>{{ aquarium.name }}</td>
+            <td>${{ aquarium.price }}</td>
+            <td>{{ aquarium.location }}</td>
+            <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}"></td>
+            <td>
+                <a href="{% url 'admin_approve_aquarium' aquarium.id %}" class="approve-btn">Approve</a>
+                <a href="{% url 'admin_reject_aquarium' aquarium.id %}" class="reject-btn">Reject</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

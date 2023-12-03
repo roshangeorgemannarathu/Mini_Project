@@ -4,6 +4,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import buy_now, razorpay_payment
 
 
 urlpatterns = [
@@ -56,11 +57,35 @@ urlpatterns = [
     path('admin/reject-pet/<int:pet_id>/', views.admin_reject_pet, name='admin_reject_pet'),
     path('admin/approve-aquarium/<int:aquarium_id>/', views.admin_approve_aquarium, name='admin_approve_aquarium'),
     path('admin/reject-aquarium/<int:aquarium_id>/', views.admin_reject_aquarium, name='admin_reject_aquarium'),
+    path('delete/<str:item_type>/<int:item_id>/', views.delete_item, name='delete_item'),
+
 
 path('usercustomer/', views.usercustomer, name='usercustomer'),
 
-path('cart/',views.cart, name='cart'),
+# path('cart/',views.cart, name='cart'),
+ path('customer_account/', views.customer_account, name='customer_account'),
+ path('dealer_account/', views.dealer_account, name='dealer_account'),
+ path('enable_aquarium/<int:aquarium_id>/', views.enable_aquarium, name='enable_aquarium'),
+    path('disable_aquarium/<int:aquarium_id>/',views. disable_aquarium, name='disable_aquarium'),
+    path('enable_pet/<int:pet_id>/', views.enable_pet, name='enable_pet'),
+    path('disable_pet/<int:pet_id>/', views.disable_pet, name='disable_pet'),
+    path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('mycart/',views.mycart,name="mycart"),
+    # path('add_to_cart/<str:category>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+     path('pet_details/<int:pet_id>/', views.pet_details, name='pet_details'),
+     
+     path('aquarium_details/<int:aquarium_id>/', views.aquarium_details, name='aquarium_details'),
+     path('buy_now/<str:category>/<int:item_id>/', views.buy_now, name='buy_now'),
+   path('buy-now/<str:category>/<int:item_id>/', buy_now, name='buy_now'),
+    path('razorpay-payment/', razorpay_payment, name='razorpay_payment'),
+     path('payment_successful/', views.payment_successful, name='payment_successful'),
+    
 
+
+
+
+
+ 
 
 ]
 

@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/font-awesome.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/project.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/owl-carousel.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aapmapp/css/lightbox.css' %}>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -32,9 +32,13 @@
         .content {
             padding: 20px 0;
         }
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
         .product-item {
             border: 1px solid #ddd;
-            margin: 10px;
             padding: 10px;
             text-align: center;
         }
@@ -58,6 +62,7 @@
             color: #fff;
             text-decoration: none;
             font-weight: bold;
+            width: 100%;
         }
         .product-item a:hover {
             background-color: #0056b3;
@@ -68,8 +73,8 @@
             color: #fff;
             text-align: center;
         }
-        h1{
-            color:red;
+        h1 {
+            color: red;
         }
     </style>
 </head>
@@ -79,38 +84,30 @@
     <!-- ***** Content Start ***** -->
     <div class="content">
         <div class="container">
-            <h1 >Welcome to our Pet and Aquarium Shop</h1>
+            <h1>Welcome to our Pet and Aquarium Shop</h1>
 
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="product-container">
+                <div class="product-item">
                     <h4>Pet Items</h4>
-                    <div class="row">
-                        {% for pet in pets %}
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="product-item">
-                                    <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}">
-                                    <h6>{{ pet.category }}</h6>
-                                    <p>${{ pet.price }}</p>
-                                    <a href="#">Add to Cart</a>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                    {% for pet in pets %}
+                        <div class="product-item">
+                            <img src="{{ pet.image.url }}" alt="{{ pet.get_category_display }} - {{ pet.id }}">
+                            <h6>{{ pet.category }}</h6>
+                            <p>Rs{{ pet.price }}</p>
+                            <a href="#">Add to Cart</a>
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="product-item">
                     <h4>Aquarium Items</h4>
-                    <div class="row">
-                        {% for aquarium in aquariums %}
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="product-item">
-                                    <img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}">
-                                    <h6>{{ aquarium.name }}</h6>
-                                    <p>${{ aquarium.price }}</p>
-                                    <a href="#">Add to Cart</a>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                    {% for aquarium in aquariums %}
+                        <div class="product-item">
+                            <img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}">
+                            <h6>{{ aquarium.name }}</h6>
+                            <p>Rs{{ aquarium.price }}</p>
+                            <a href="#">Add to Cart</a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

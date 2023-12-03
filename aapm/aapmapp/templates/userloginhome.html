@@ -197,15 +197,17 @@
     <main>
         <!-- User Info Section -->
         <div class="user-info">
-
             <div class="user-name">Welcome, {{ request.session.username }}</div>
             <div class="user-description">Role {{ request.session.role }}</div>
-    
+            
             <a href="#" class="get-started-button" id="show-form-button">Edit Profile</a>
         
-            <a href="{% url 'userdealer' %}" class="get-started-button" id="show-form-button">Get Started</a>
+            {% if request.session.role == "dealer" %}
+                <a href="{% url 'dealer_account' %}" class="get-started-button">Get Started</a>
+            {% elif request.session.role == "customer" %}
+                <a href="{% url 'customer_account' %}" class="get-started-button">Get Started</a>
+            {% endif %}
         </div>
-        
         <!-- End of User Info Section -->
         <div class="form-container" id="registration-form">
             <form action="#" method="post" enctype="multipart/form-data">

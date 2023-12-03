@@ -49,6 +49,7 @@ class Aquarium(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     location = models.CharField(max_length=100)
+    description = models.TextField(max_length=30, null=True)
     image = models.ImageField(upload_to='aquarium_images/')
 
     def __str__(self):
@@ -63,10 +64,13 @@ class Pet(models.Model):
         ('bird', 'Birds'),
     ]
 
-
-
-
     category = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
+    # sub_category =models.CharField(max_length=10, choices=)
+    pet_breed = models.CharField(max_length=100, null=True)
+    pet_age = models.CharField(max_length=10 ,null=True)
+    
+    pet_description = models.TextField(max_length=30, null=True)
+    
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     location = models.CharField(max_length=100)
@@ -75,3 +79,25 @@ class Pet(models.Model):
     def __str__(self):
         return f"{self.get_category_display()} - {self.id}"
 
+
+class CartItem(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    item_category = models.CharField(max_length=255)  # 'pet' or 'aquarium'
+    item_id = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # Add a foreign key to the respective item model (Pet or Aquarium)
+    # You may need to adjust these fields based on your actual models
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, null=True, blank=True)
+    aquarium = models.ForeignKey(Aquarium, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.user.username}'s Cart Item - {self.item_category} {self.item_id}"
+
+
+
+    
+
+
+   

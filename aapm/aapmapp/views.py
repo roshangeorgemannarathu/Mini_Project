@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.db.models import Q  # Import Q for complex queries
 from django.http import JsonResponse
 from django.http import Http404
-from .models import UserProfile 
+from .models import UserProfile,CartItem
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -15,19 +15,14 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponse
 from .urls import *
-
-
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 
-
-
-
-
+import razorpay
 #for activating user account
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
@@ -385,6 +380,7 @@ def activate_user(request, user_id):
 
 
 def userdealer(request):
+        # Aquarium.objects.all().delete()
         return render(request, 'userdealer.html')
 
 from django.http import Http404
@@ -496,7 +492,7 @@ def viewdatabase(request, dealer_id):
     print(f"Dealer ID from URL: {dealer_id}")
     print(f"Current User ID: {user.id}")
 
-    if str(dealer_id) == str(user.id):
+    if dealer.objects.filter(id=request.user.id).exists():
         user_pets = Pet.objects.filter(dealer=user)
         user_aquariums = Aquarium.objects.filter(dealer=user)
 
@@ -508,6 +504,28 @@ def viewdatabase(request, dealer_id):
         # Handle the case where the user is trying to access another user's data
         # You can display an error message or handle it as needed.
         return render(request, '')  # Create an 'access_denied.html' template
+    
+from django.shortcuts import redirect
+
+@login_required
+def delete_item(request, item_type, item_id):
+    user = request.user
+
+    if item_type == 'aquarium':
+        item = Aquarium.objects.get(id=item_id)
+    elif item_type == 'pet':
+        item = Pet.objects.get(id=item_id)
+    else:
+        # Handle invalid item_type, e.g., by displaying an error message.
+        return redirect('viewdatabase')
+
+    if item.dealer == user:
+        item.delete()
+        return redirect('viewdatabase')
+    else:
+        # Handle unauthorized access, e.g., by displaying an error message.
+        return redirect('viewdatabase')
+
 
 
 
@@ -520,21 +538,27 @@ def addpets(request):
             # Process the Aquarium form
             name = request.POST.get('aquarium_name')
             price = request.POST.get('aquarium_price')
+            quantity = request.POST.get('pet_quantity')
+            description = request.POST.get('aquarium_description')
             location = request.POST.get('aquarium_location')
             image = request.FILES.get('aquarium_image')
 
             # Create the Aquarium object and associate it with the current user
-            Aquarium.objects.create(dealer=request.user, name=name, price=price, quantity=1, location=location, image=image)
+            Aquarium.objects.create(dealer=request.user, name=name, price=price, quantity=quantity, location=location, image=image,description=description)
 
         elif category == 'pets':
             # Process the Pet form
-            pet_category = request.POST.get('pet_category')
+            category = request.POST.get('pet_category')
+            pet_breed = request.POST.get('pet_breed')
+            pet_age = request.POST.get('pet_age')
             price = request.POST.get('pet_price')
+            quantity = request.POST.get('pet_quantity')
+            pet_description = request.POST.get('pet_description')
             location = request.POST.get('pet_location')
             image = request.FILES.get('pet_image')
 
             # Create the Pet object and associate it with the current user
-            Pet.objects.create(dealer=request.user, category=pet_category, price=price, quantity=1, location=location, image=image)
+            Pet.objects.create(dealer=request.user, category=category, price = price , quantity=quantity, location=location, image=image, pet_breed=pet_breed, pet_age=pet_age, pet_description=pet_description)
 
         # Redirect to the 'viewdatabase' view for the current user
         return redirect('viewdatabase', dealer_id=request.user.id)
@@ -620,8 +644,7 @@ def admin_approve_aquarium(request, aquarium_id):
     # Get the aquarium to be approved
     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
     
-    # Assuming you have a status field in your Aquarium model, you can update it to 'approved'
-    aquarium.status = 'approved'
+    # Assuming you have a status fie6.status = 'approved'
     aquarium.save()
 
     # Redirect back to the admin view item page
@@ -647,7 +670,359 @@ def usercustomer(request):
 
 
 
-def cart(request):
-    pets = Pet.objects.all()
+# def cart(request):
+#     pets = Pet.objects.all()
+#     aquariums = Aquarium.objects.all()
+#     return render(request, 'cart.html', {'pets': pets, 'aquariums': aquariums})
+
+
+def customer_account(request):
     aquariums = Aquarium.objects.all()
-    return render(request, 'cart.html', {'pets': pets, 'aquariums': aquariums})
+    pets = Pet.objects.all()
+    
+    return render(request, 'customer_account.html', {'aquariums': aquariums, 'pets': pets})
+
+def dealer_account(request):
+        return render(request, 'dealer_account.html')
+
+def enable_aquarium(request, aquarium_id):
+    aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+    aquarium.is_enabled = True
+    aquarium.save()
+    return redirect('viewdatabase', user_id=request.user.id)  # Replace 'viewdatabase' with your actual view name
+
+def disable_aquarium(request, aquarium_id):
+    aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+    aquarium.is_enabled = False
+    aquarium.save()
+    return redirect('viewdatabase', user_id=request.user.id)
+
+def enable_pet(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+    pet.is_enabled = True
+    pet.save()
+    return redirect('viewdatabase', user_id=request.user.id)
+
+def disable_pet(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+    pet.is_enabled = False
+    pet.save()
+    return redirect('viewdatabase', user_id=request.user.id)
+
+# def add_to_cart(request, category, item_id):
+#     cart = Cart(request)
+
+#     if category == 'aquarium':
+#         item = get_object_or_404(Aquarium, pk=item_id)
+#         context = {
+#             'category': 'Aquarium',
+#             'name': item.name,
+#             'description': item.description,
+#             'price': item.price,
+#             'quantity': item.quantity,
+#             'location': item.location,
+#             'image': item.image.url,
+#         }
+#     elif category == 'pet':
+#         item = get_object_or_404(Pet, pk=item_id)
+#         context = {
+#             'category': 'Pet',
+#             'sub_category': item.get_category_display(),
+#             'breed': item.pet_breed,
+#             'pet_age': item.pet_age,
+#             'price': item.price,
+#             'quantity': item.quantity,
+#             'location': item.location,
+#             'image': item.image.url,
+#         }
+#     else:
+#         # Handle other categories if needed
+#         return redirect('home')  # Redirect to home if category is not recognized
+
+#     cart.add(item=item)
+#     return render(request, 'your_template/add_to_cart.html', context)
+
+
+
+# @login_required
+# def add_to_cart(request, category, item_id):
+#     print(category)
+#     print(item_id)
+#     uid=request.user
+#     user_profile = get_object_or_404(UserProfile, user_id=uid)
+#     CartItem.objects.create(
+#                         user=user_profile,
+#                         item_category="aquarium",
+#                         item_id=item_id,
+#                         quantity=1
+#                     )
+#     return redirect('add_to_cart')
+    
+  
+# def add_to_cart(request, category, item_id):
+#     try:
+#         # Retrieve the item based on the category
+#         if category == 'pet':
+#             item = get_object_or_404(Pet, id=item_id)
+#         elif category == 'aquarium':
+#             item = get_object_or_404(Aquarium, id=item_id)
+#         else:
+#             # Handle other categories if needed
+#             item = None
+
+#         if item:
+#             if request.user.is_authenticated:
+#                 user_profile = get_object_or_404(UserProfile, user=request.user)
+
+#                 # Check if the item is already in the cart
+#                 cart_item = CartItem.objects.filter(
+#                     user=user_profile,
+#                     item_category=category,
+#                     item_id=item_id
+#                 ).first()
+
+#                 # If the item is already in the cart, update the quantity
+#                 if cart_item:
+#                     cart_item.quantity += 1
+#                     cart_item.save()
+#                 else:
+#                     # If the item is not in the cart, create a new entry
+#                     CartItem.objects.create(
+#                         user=user_profile,
+#                         item_category=category,
+#                         item_id=item_id,
+#                         quantity=1
+#                     )
+
+#                 messages.success(request, f"{item.name} added to the cart successfully.")
+#             else:
+#                 messages.warning(request, "Please log in to add items to your cart.")
+#     except Exception as e:
+#         # Log the exception or handle it appropriately
+#         messages.error(request, f"An error occurred while adding the item to the cart: {str(e)}")
+
+#     return redirect('customer_account')
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import CartItem, UserProfile, Aquarium, Pet
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def add_to_cart(request, category, item_id):
+    try:
+        # Retrieve the item based on the category
+        if category == 'pet':
+            item = get_object_or_404(Pet, id=item_id)
+        elif category == 'aquarium':
+            item = get_object_or_404(Aquarium, id=item_id)
+        else:
+            # Handle other categories if needed
+            item = None
+
+        if item:
+            if request.user.is_authenticated:
+                user_profile = get_object_or_404(UserProfile, user=request.user)
+
+                # Check if the item is already in the cart
+                cart_item = CartItem.objects.filter(
+                    user=user_profile,
+                    item_category=category,
+                    item_id=item_id
+                ).first()
+
+                # If the item is already in the cart, update the quantity
+                if cart_item:
+                    cart_item.quantity += 1
+                    cart_item.save()
+                else:
+                    # If the item is not in the cart, create a new entry
+                    CartItem.objects.create(
+                        user=user_profile,
+                        item_category=category,
+                        item_id=item_id,
+                        quantity=1,
+                        pet=item if category == 'pet' else None,
+                        aquarium=item if category == 'aquarium' else None,
+                    )
+
+                return redirect('/mycart/')
+            else:
+                messages.warning(request, "Please log in to add items to your cart.")
+    except Exception as e:
+        # Log the exception or handle it appropriately
+        messages.error(request, f"An error occurred while adding the item to the cart: {str(e)}")
+
+    return redirect('customer_account')
+
+
+def mycart(request):
+    # Retrieve relevant data and pass it to the template
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    cart_items = CartItem.objects.filter(user=user_profile)
+    # for i in cart_items:
+    #     i.price
+    context = {'cart_items': cart_items}
+    return render(request, 'add_to_cart.html', context)
+
+
+
+
+def item_detail(request, category, item_id):
+    if category == 'pet':
+        item = get_object_or_404(Pet, id=item_id)
+    elif category == 'aquarium':
+        item = get_object_or_404(Aquarium, id=item_id)
+    else:
+        # Handle other categories if needed
+        item = None
+
+    return render(request, 'item_detail.html', {'item': item, 'category': category})
+
+# def pet_details(request, pet_id):
+#     pet = get_object_or_404(Pet, id=pet_id)
+
+    
+#     client = razorpay.Client(auth=("YOUR_ID", "YOUR_SECRET"))
+
+#     DATA = {
+#     "amount": 100,
+#     "currency": "INR",
+#     "receipt": "receipt#1",
+#     "notes": {
+#         "key1": "value3",
+#         "key2": "value2"
+#      }
+#     }
+#     payment =client.order.create(data=DATA)
+#     return render(request, 'pet_details.html', {'pet': pet})
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+import razorpay
+
+def pet_details(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+
+    amount_in_paise = pet.price * 100  # Assuming pet.price is the price of the pet
+
+    if request.method == 'POST':
+        # Assuming you have your Razorpay API credentials stored in your Django settings
+        razorpay_key_id = "rzp_test_KPliOP7waiGNR8"
+        razorpay_key_secret = "ehsJBVnmAmuDFkFbXIsi2Gm3"
+
+        client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
+
+        DATA = {
+            "amount": amount_in_paise,
+            "currency": "INR",
+            "receipt": "receipt#1",
+            "notes": {
+                "key1": "value3",
+                "key2": "value2"
+             }
+        }
+        payment = client.order.create(data=DATA)
+
+        context = {
+            'pet': pet,
+            'payment': payment,
+            'amount_in_paise': amount_in_paise,  # Add the multiplied amount to the context
+        }
+
+        return render(request, 'pet_details.html', context)
+
+    return render(request, 'pet_details.html', {'pet': pet, 'amount_in_paise': amount_in_paise})
+
+
+# def aquarium_details(request, aquarium_id):
+#     aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+#     context = {'aquarium': aquarium}
+#     return render(request, 'aquarium_details.html', context)
+
+def aquarium_details(request, aquarium_id):
+    aquarium = get_object_or_404(Aquarium, id=aquarium_id)
+
+    amount_in_paise = aquarium.price * 100  # Assuming pet.price is the price of the pet
+
+    if request.method == 'POST':
+        # Assuming you have your Razorpay API credentials stored in your Django settings
+        razorpay_key_id = "rzp_test_KPliOP7waiGNR8"
+        razorpay_key_secret = "ehsJBVnmAmuDFkFbXIsi2Gm3"
+
+        client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
+
+        DATA = {
+            "amount": amount_in_paise,
+            "currency": "INR",
+            "receipt": "receipt#1",
+            "notes": {
+                "key1": "value3",
+                "key2": "value2"
+             }
+        }
+        payment = client.order.create(data=DATA)
+
+        context = {
+            'pet': aquarium,
+            'payment': payment,
+            'amount_in_paise': amount_in_paise,  # Add the multiplied amount to the context
+        }
+
+        return render(request, 'aquarium_details.html', context)
+
+    return render(request, 'aquarium_details.html', {'aquarium': aquarium, 'amount_in_paise': amount_in_paise})
+
+
+
+
+# def buy_now(request, category, item_id):
+#     # Your 'buy_now' view logic goes here
+#     return render(request, 'customer_account.html')
+
+def buy_now(request, category, item_id):
+
+    return render(request, 'pet_details.html', {'pet': pet, 'order': order})
+
+@csrf_exempt
+def razorpay_payment(request):
+    if request.method == 'POST':
+        # Verify the Razorpay payment
+        params_dict = request.POST
+        razorpay_signature = params_dict.get('razorpay_signature')
+        order_id = params_dict.get('razorpay_order_id')
+        razorpay_payment_id = params_dict.get('razorpay_payment_id')
+
+        # Verify the payment
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        try:
+            client.utility.verify_payment_signature(params_dict, razorpay_signature, order_id)
+            # Payment verified, process the order or update the status as needed
+            return HttpResponse('Payment Successful')
+        except Exception as e:
+            # Payment verification failed
+            return HttpResponse(f'Payment Failed: {str(e)}')
+    else:
+        # Invalid request method
+        return HttpResponse(status=400)
+    
+    
+    
+def payment_successful(request, category, item_id):
+    try:
+            order = Order.objects.get(user=request.user, status='paid')  # Adjust the query as needed
+    except Order.DoesNotExist:
+            # Handle the case where the order is not found
+            return render(request, 'payments/payment_error.html')  # Create an error template
+
+    context = {
+            'order_id': order.order_id,
+            'amount_paid': order.amount_paid,
+            'estimated_delivery_date': order.estimated_delivery_date,
+            # Add more context variables as needed
+        }
+
+    return render(request, self.template_name, context)
+    
+    

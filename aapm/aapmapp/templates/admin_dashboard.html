@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    
-    <nav>
-        <ul>
-            <!-- Add the logout button here -->
-            <li style="float: right;"><a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a></li>
-        </ul>
-    </nav>
+
     <style>
         /* Reset some default styles */
         body, h1, h2, p, ul, li {
@@ -51,6 +45,22 @@
             background-color: #555;
             color: #fff;
             padding: 20px;
+            position: relative;
+        }
+
+        #logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+
+        #logout-link:hover {
+            background-color: #0056b3;
         }
 
         /* CSS for Cards (Sample Content) */
@@ -73,9 +83,6 @@
             width: 100%;
         }
     </style>
-    <nav>
-       
-    </nav>
 </head>
 <body>
     <!-- Sidebar -->
@@ -85,16 +92,17 @@
         <a href="customers.html">Customers</a>
         <a href="dealers.html">Dealers</a>
         <a href="deliveryman.html">Delivery Man</a>
+        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
     </div>
 
     <!-- Content Area -->
     <div class="content">
         <!-- Header -->
         <div class="header">
-            <h1>Welcome to the Admin Dashboard</h1>
-            
+            <center><h1>Admin Dashboard</h1></center>
+            <!-- Logout Button -->
+            <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a>
         </div>
-        
 
         <!-- Sample Content -->
         <div class="card">

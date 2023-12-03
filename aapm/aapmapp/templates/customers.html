@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <style>
         /* Top-level CSS for table formatting */
@@ -9,11 +9,12 @@
             margin: 0;
             padding: 0;
         }
-                /* CSS for Sidebar */
-                .sidebar {
+
+        /* CSS for Sidebar */
+        .sidebar {
             width: 250px;
             background-color: #333;
-            color: #fff;
+            color: #E6E6FA;
             position: fixed;
             height: 100%;
             overflow: auto;
@@ -42,10 +43,31 @@
             background-color: #E6E6FA;
             color: #fff;
             padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .header #logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+
+        .header #logout-link:hover {
+            background-color: #0056b3;
         }
 
         /* CSS for Cards (Sample Content) */
-        
 
         /* CSS for Footer */
         .footer {
@@ -120,83 +142,83 @@
     </style>
     <title>Customer Accounts</title>
     <!-- Your CSS styles here -->
-    <body>
+</head>
+<body>
     <div class="sidebar">
         <li style=""><a href="#" style="color: red;">Dashboard</a></li>
         <a href="users.html">User Accounts</a>
         <a href="customers.html">Customers</a>
         <a href="dealers.html">Dealers</a>
         <a href="deliveryman.html">Delivery Man</a>
+        <a href="{% url 'adminviewitem' %}">View Aquarium and Pets</a>
     </div>
     <div class="content">
         <!-- Header -->
         <div class="header">
             <!-- Header content -->
+            <h1>Customers Account</h1>
+            <!-- Logout Button -->
+            <a href="{% url 'logout' %}" style="color: white;" id='logout-link'>Logout</a>
         </div>
         <!-- Filter form -->
-        <h1>Customer Accounts</h1>
         <form method="GET" id="filterForm">
             <!-- Add your filter fields here -->
             <input type="text" name="username_filter" id="username_filter" placeholder="Filter by Username">
             <button type="button" id="filterButton">Filter</button>
         </form>
-</head>
-<body>
-   <!-- User accounts table -->
-<!-- User accounts table -->
-<table id="userTable">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Fullname</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for customer in customers %}
-        <tr>
-            <td>{{ customer.username }}</td>
-            <td>{{ customer.fullname }}</td>
-            <td>{{ customer.email }}</td>
-            <td>{{ customer.role }}</td>
-            <td>
-                {% if customer.is_active %}
-                <form method="post" action="{% url 'deactivate_customer' customer.id %}">
-                    {% csrf_token %}
-                    <button type="submit" style="background-color: red; color: white;">Deactivate</button>
-                </form>
-            {% else %}
-                <form method="post" action="{% url 'activate_customer' customer.id %}">
-                    {% csrf_token %}
-                    <button type="submit" style="background-color: green; color: white;">Activate</button>
-                </form>
-            {% endif %}
-        </td>
-        {% empty %}
-        <tr>
-            <td colspan="5">No customers available.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<script>
-    // JavaScript code for handling the filter
-    document.getElementById("filterButton").addEventListener("click", function() {
-        var filterValue = document.getElementById("username_filter").value.toLowerCase();
-        var tableRows = document.querySelectorAll("#userTable tbody tr");
+        <!-- User accounts table -->
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.username }}</td>
+                    <td>{{ customer.fullname }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>
+                        {% if customer.is_active %}
+                        <form method="post" action="{% url 'deactivate_customer' customer.id %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: red; color: white;">Deactivate</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'activate_customer' customer.id %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: green; color: white;">Activate</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No customers available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <script>
+            // JavaScript code for handling the filter
+            document.getElementById("filterButton").addEventListener("click", function() {
+                var filterValue = document.getElementById("username_filter").value.toLowerCase();
+                var tableRows = document.querySelectorAll("#userTable tbody tr");
 
-        tableRows.forEach(function(row) {
-            var username = row.querySelector("td:first-child").textContent.toLowerCase();
-            if (username.includes(filterValue)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-</script>
+                tableRows.forEach(function(row) {
+                    var username = row.querySelector("td:first-child").textContent.toLowerCase();
+                    if (username.includes(filterValue)) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        </script>
+    </div>
 </body>
 </html>
-

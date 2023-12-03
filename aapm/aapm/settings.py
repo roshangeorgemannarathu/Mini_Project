@@ -137,3 +137,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'roshangeorge2024b@mca.ajce.in'
 EMAIL_HOST_PASSWORD = 'Roshan@2k'
+
+
+RAZORPAY_API_KEY = 'rzp_test_KPliOP7waiGNR8'
+RAZORPAY_API_SECRET = 'ehsJBVnmAmuDFkFbXIsi2Gm3'
+

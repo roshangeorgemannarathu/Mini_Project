@@ -13,11 +13,14 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border: 1px solid #ddd;
@@ -43,6 +46,7 @@
 
         th {
             background-color: #f2f2f2;
+            width: 150px;
         }
 
         img {
@@ -58,68 +62,144 @@
         a:hover {
             text-decoration: underline;
         }
+
+        header {
+            text-align: center;
+            background-color: #e2d9cf;
+            color: #000;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logout-button {
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .enable-button {
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .disable-button {
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e2d9cf;
+            color: #000;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>View Your Pet and Aquarium Data</h1>
+<header>
+    <h2><div>Your Aquarium / Pets</div></h2>
+    <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+</header>
 
-    <h2>Aquariums</h2>
+<div class="container">
+   
+    <center><h2>Aquariums</h2></center>
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Name Of The Aquarium</th>
+                <th>Aquarium Description</th>
                 <th>Price</th>
                 <th>Location</th>
                 <th>Image</th>
+                <th>Edit</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for aquarium in user_aquariums %} {# Use user_aquariums instead of aquariums #}
+            {% for aquarium in user_aquariums %}
                 <tr>
+                    
                     <td>{{ aquarium.name }}</td>
-                    <td>${{ aquarium.price }}</td>
+                    <td>{{ aquarium.description}}</td>
+                    <td>Rs{{ aquarium.price }}</td>
                     <td>{{ aquarium.location }}</td>
-                    <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.name }}" style="width: 100px; height: 100px;"></td>
+                    <td><img src="{{ aquarium.image.url }}" alt="{{ aquarium.image.url }}" style="width: 100px; height: 100px;"></td>
                     <td>
-                        <a href="{% url 'edit_viewdatabase' aquarium.id %}">Edit</a>
-                        <a href="{% url 'delete_aquarium' aquarium.id %}">Delete</a>
-                    </td>
+                        <a href="{% url 'edit_viewdatabase' aquarium.id %}">Edit</a></td>
+                        <td>
+                            {% if aquarium.is_enabled %}
+                                <a href="{% url 'disable_aquarium' aquarium.id %}" class="disable-button">Disable</a>
+                            {% else %}
+                                <a href="{% url 'enable_aquarium' aquarium.id %}" class="enable-button">Enable</a>
+                            {% endif %}
+                        </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <h2>Pets</h2>
+    <center><h2>Pets</h2></center>
     <table>
         <thead>
             <tr>
-                <th>Pet Id</th>
                 <th>Category</th>
+                <th>Sub Category</th>
+                <th>Breed</th>
+                <th>Pet Age</th>
                 <th>Price</th>
+                <th>Pet Description</th>
                 <th>Location</th>
                 <th>Image</th>
+                <th>Edit</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for pet in user_pets %} {# Use user_pets instead of pets #}
+            {% for pet in user_pets %}
                 <tr>
-                    <td>{{ pet.id }}</td>
+                    
                     <td>{{ pet.category }}</td>
-                    <td>${{ pet.price }}</td>
+                    <td>{{ pet.subcategory }}</td>
+                    <td>{{ pet.pet_breed }}</td>
+                    <td>{{ pet.pet_age}}</td>
+                    <td>Rs{{ pet.price }}</td>
+                    <td>{{ pet.pet_description}}</td>
                     <td>{{ pet.location }}</td>
                     <td><img src="{{ pet.image.url }}" alt="{{ pet.category }} - {{ pet.id }}" width="100"></td>
                     <td>
-                        <a href="{% url 'edit_viewdatabase' pet.id %}">Edit</a>
-                        <a href="{% url 'delete_aquarium' pet.id %}">Delete</a>
+                        <a href="">Edit</a>
                     </td>
+                    <td>
+                        {% if pet.is_enabled %}
+                            <a href="{% url 'disable_pet' pet.id %}" class="disable-button">Disable</a>
+                        {% else %}
+                            <a href="{% url 'enable_pet' pet.id %}" class="enable-button">Enable</a>
+                        {% endif %}
+                    </td>
+                  
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+<footer>
+    &copy; 2023 Your Pet and Aquarium Data. All rights reserved.
+</footer>
 
 <!-- Include Bootstrap JS scripts if needed -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
